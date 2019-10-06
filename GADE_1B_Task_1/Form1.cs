@@ -28,6 +28,7 @@ namespace GADE_1B_Task_1
         {
             int timer;
             gameEngine.GameLogic(gameEngine.map.arrUnits);
+            
             lblMap.Text = gameEngine.map.MapDisplay();     
             timer = (gameEngine.gameRounds);
             rtxtInfo.Text = gameEngine.OutputString;
@@ -47,6 +48,7 @@ namespace GADE_1B_Task_1
         private void Form1_Load(object sender, EventArgs e)
         {
             gameEngine = new GameEngine();
+            gameEngine.map.RandomBattlefield();
         }
     }
 }

@@ -10,15 +10,18 @@ namespace GADE_1B_Task_1
     {
         public int gameRounds;
         unit[] arrUnits;
-        public Map map ;
-        public string OutputString;
+        public Map map;
+        public string OutputString, buildingOutput;
+        Form1 form = new Form1();
 
         public GameEngine()
         {
-            map = new Map(2);
-            map.RandomBattlefield();
+            map = new Map(4);
+
             this.arrUnits = map.arrUnits;
             gameRounds = 0;
+
+
         }
 
 
@@ -28,13 +31,7 @@ namespace GADE_1B_Task_1
             string ReturnVal;
             ReturnVal = " ";
 
-            string MainType = Main.GetType().ToString();
-            string[] mType = MainType.Split('.');
-            MainType = mType[mType.Length - 1];
 
-            string unitType = Enemy.GetType().ToString();
-            string[] Type = unitType.Split('.');
-            unitType = Type[Type.Length - 1];
 
             int xTotal, yTotal;
             string xDirection, yDirection;
@@ -43,304 +40,149 @@ namespace GADE_1B_Task_1
             xDirection = "";
             yDirection = "";
 
-            if (MainType == "MeleeUnit")
+            xTotal = Main.xPos - Enemy.xPos;
+            yTotal = Main.yPos - Enemy.yPos;
+
+
+
+            if (xTotal > 0)
             {
-                MeleeUnit m = (MeleeUnit)Main;
-                if (unitType == "MeleeUnit")
-                {
-                    MeleeUnit e = (MeleeUnit)Enemy;
-
-                    xTotal = m.xPos - e.xPos;
-                    yTotal = m.yPos - e.yPos;
-
-                    if (xTotal > 0)
-                    {
-                        xDirection = "left";
-                    }
-                    else if (xTotal < 0)
-                    {
-                        xDirection = "right";
-                    }
-
-                    if (yTotal > 0)
-                    {
-                        yDirection = "down";
-                    }
-                    else if (yTotal < 0)
-                    {
-                        yDirection = "up";
-                    }
-
-                    xTotal = Math.Abs(m.xPos - e.xPos);
-                    yTotal = Math.Abs(m.yPos - e.yPos);
-                }
-                else
-                {
-                    RangedUnit e = (RangedUnit)Enemy;
-                    xTotal = m.xPos - e.xPos;
-                    yTotal = m.yPos - e.yPos;
-
-                    if (xTotal > 0)
-                    {
-                        xDirection = "left";
-                    }
-                    else if (xTotal < 0)
-                    {
-                        xDirection = "right";
-                    }
-
-                    if (yTotal > 0)
-                    {
-                        yDirection = "down";
-                    }
-                    else if (yTotal < 0)
-                    {
-                        yDirection = "up";
-                    }
-
-                    xTotal = Math.Abs(m.xPos - e.xPos);
-                    yTotal = Math.Abs(m.yPos - e.yPos);
-                }
+                xDirection = "left";
             }
-            else
+            else if (xTotal < 0)
             {
-                RangedUnit m = (RangedUnit)Main;
-                if (unitType == "MeleeUnit")
-                {
-                    MeleeUnit e = (MeleeUnit)Enemy;
-                    xTotal = m.xPos - e.xPos;
-                    yTotal = m.yPos - e.yPos;
-
-                    if (xTotal > 0)
-                    {
-                        xDirection = "left";
-                    }
-                    else if (xTotal < 0)
-                    {
-                        xDirection = "right";
-                    }
-
-                    if (yTotal > 0)
-                    {
-                        yDirection = "down";
-                    }
-                    else if (yTotal < 0)
-                    {
-                        yDirection = "up";
-                    }
-
-                    xTotal = Math.Abs(m.xPos - e.xPos);
-                    yTotal = Math.Abs(m.yPos - e.yPos);
-                }
-                else
-                {
-                    RangedUnit e = (RangedUnit)Enemy;
-                    xTotal = m.xPos - e.xPos;
-                    yTotal = m.yPos - e.yPos;
-
-                    if (xTotal > 0)
-                    {
-                        xDirection = "left";
-                    }
-                    else if (xTotal < 0)
-                    {
-                        xDirection = "right";
-                    }
-
-                    if (yTotal > 0)
-                    {
-                        yDirection = "down";
-                    }
-                    else if (yTotal < 0)
-                    {
-                        yDirection = "up";
-                    }
-
-                    xTotal = Math.Abs(m.xPos - e.xPos);
-                    yTotal = Math.Abs(m.yPos - e.yPos);
-                }
+                xDirection = "right";
             }
 
-            if (xTotal <= yTotal || xTotal>0)
+
+
+            if (yTotal < 0)
+            {
+                yDirection = "down";
+            }
+            else if (yTotal > 0)
+            {
+                yDirection = "up";
+            }
+
+            xTotal = Math.Abs(Main.xPos - Enemy.xPos);
+            yTotal = Math.Abs(Main.yPos - Enemy.yPos);
+
+            if (xTotal >= yTotal && xTotal > 0)
             {
                 ReturnVal = xDirection;
                 return xDirection;
-                
+
             }
             else
             {
                 ReturnVal = yDirection;
                 return yDirection;
-                
-            }              	
+
+            }
         }
 
 
+
+
+
         //
-        public void GameLogic(unit[] ArrUnits)
+        public void GameLogic(unit[] arrUnits)
         {
             gameRounds++;
             Random rnd = new Random();
             bool death;
             string direction;
             direction = " ";
-            
+
             death = false;
-            
+
             OutputString = "";
-            for (int i = 0; i < ArrUnits.Length; i++)
+            for (int i = 0; i < arrUnits.Length; i++)
             {
-                string unitType = ArrUnits[i].GetType().ToString();
-                string[] Type = unitType.Split('.');
-                unitType = Type[Type.Length - 1];
-
-                if (unitType == "MeleeUnit")
-                {
-                    MeleeUnit un = (MeleeUnit)ArrUnits[i];
-
-                    death = un.Death();
-                    if (death == true)
-                    { }
-                    else
-                    {
-
-                        unit closestunit;
-                        closestunit = un.ClosestUnit(ArrUnits);
-                        if (un == closestunit)
-                        { }
-                        else
-                        {
-
-                           un.AttackRange(closestunit);
-                            if (un.HP<= (un.maxHP*0.25))
-                            {
-                                string randomDirection;
-                                int random;
-
-                                random = rnd.Next(1, 5);
-
-                                if (random == 1)
-                                {
-                                    randomDirection = "left";
-                                }
-                                else if (random == 2)
-                                {
-                                    randomDirection = "right";
-                                }
-                                else if (random == 3)
-                                {
-                                    randomDirection = "up";
-                                }
-                                else
-                                {
-                                    randomDirection = "down";
-                                }
-
-                                un.Move(randomDirection);
-                                
-
-                            }
-                            else
-                            {
 
 
-                                if (un.isAttacking == true)
-                                {
-                                    un.Combat(closestunit);
-                                }
-                                else
-                                {
-                                    int oldX, oldY;
-                                    oldX = un.xPos;
-                                    oldY = un.yPos;
-                                    direction = Direction(un, closestunit);
-                                    un.Move(direction);
-                                    map.MapUpdate(un,oldX,oldY);
-                                    
-                                }
-                            }
 
-                        }
-                    }
-                    OutputString += "\n" + un.ToString();
-                }
+
+
+                death = arrUnits[i].Death();
+                if (death == true)
+                { arrUnits[i].HP = 0; }
                 else
                 {
-                    RangedUnit un = (RangedUnit)ArrUnits[i];
 
-                    death = un.Death();
-                    if (death == true)
+                    unit closestunit;
+                    closestunit = arrUnits[i].ClosestUnit(arrUnits);
+                    if (arrUnits[i] == closestunit)
                     { }
                     else
                     {
 
-                        unit closestunit;
-                        closestunit = un.ClosestUnit(ArrUnits);
-                        if (un == closestunit)
-                        { }
-                        else
+                        arrUnits[i].AttackRange(closestunit);
+                        if (arrUnits[i].HP <= (arrUnits[i].maxHP * 0.25))
                         {
+                            string randomDirection;
+                            int random;
 
-                            un.AttackRange(closestunit);
-                            if (un.HP <= (un.maxHP * 0.25))
+                            random = rnd.Next(1, 5);
+
+                            if (random == 1)
                             {
-                                string randomDirection;
-                                int random;
-
-                                random = rnd.Next(1, 5);
-
-                                if (random == 1)
-                                {
-                                    randomDirection = "left";
-                                }
-                                else if (random == 2)
-                                {
-                                    randomDirection = "right";
-                                }
-                                else if (random == 3)
-                                {
-                                    randomDirection = "up";
-                                }
-                                else
-                                {
-                                    randomDirection = "down";
-                                }
-
-                                un.Move(randomDirection);
-
-
+                                randomDirection = "left";
+                            }
+                            else if (random == 2)
+                            {
+                                randomDirection = "right";
+                            }
+                            else if (random == 3)
+                            {
+                                randomDirection = "up";
                             }
                             else
                             {
-
-
-                                if (un.isAttacking == true)
-                                {
-                                    un.Combat(closestunit);
-                                }
-                                else
-                                {
-                                    int oldX, oldY;
-                                    oldX = un.xPos;
-                                    oldY = un.yPos;
-                                    direction = Direction(un, closestunit);
-                                    un.Move(direction);
-                                    map.MapUpdate(un, oldX, oldY);
-
-                                }
+                                randomDirection = "down";
                             }
 
+                            arrUnits[i].Move(randomDirection);
+
+                            arrUnits[i].HP += 2;
                         }
+                        else
+                        {
+
+
+                            if (arrUnits[i].isAttacking == true)
+                            {
+                                arrUnits[i].Combat(closestunit);
+                            }
+                            else
+                            {
+                                int oldX, oldY;
+                                oldX = arrUnits[i].xPos;
+                                oldY = arrUnits[i].yPos;
+                                direction = Direction(arrUnits[i], closestunit);
+                                arrUnits[i].Move(direction);
+                                map.MapUpdate(arrUnits[i], oldX, oldY);
+
+                            }
+                        }
+
                     }
-                    OutputString += "\n" + un.ToString();
                 }
+                OutputString += "\n" + arrUnits[i].ToString();
+
+
 
                 OutputString += "\n";
 
             }
-            
 
-            
+            buildingOutput = " ";
+
+           
+
+
+
         }
 
     }

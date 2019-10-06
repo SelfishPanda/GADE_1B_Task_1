@@ -8,7 +8,7 @@ namespace GADE_1B_Task_1
         char[,] arrMap = new char[20, 20];
         public unit[] arrUnits;
         
-        int sumUnits;
+        int sumUnits, random;
 
         //CLASS CONSTRUCTORS
         public Map(int _sumUnits)
@@ -37,22 +37,30 @@ namespace GADE_1B_Task_1
 
             for (int i = 0; i < sumUnits; i++)
             {
-                
-                
-                randomX= rnd.Next(0,20);
-                randomY = rnd.Next(0,20);
 
-                int random;
+
+                randomX = rnd.Next(0, 20);
+                randomY = rnd.Next(0, 20);
+
+
                 random = rnd.Next(1, 5);
+
+                while (arrMap[randomX, randomY] == 'x' || arrMap[randomX, randomY] == 'X' || arrMap[randomX, randomY] == 'o' || arrMap[randomX, randomY] == 'O')
+                {
+
+                    randomX = rnd.Next(0, 20);
+                    randomY = rnd.Next(0, 20);
+
+                }
 
                 if (random == 1)
                 {
-                      
 
-                    MeleeUnit unit = new MeleeUnit(randomX, randomY, 100, 1, 5, 1, "Team1", 'X',false);                
+
+                    MeleeUnit unit = new MeleeUnit(randomX, randomY, 100, 1, 5, 1, "Team1", 'X', false);
                     arrMap[unit.xPos, unit.yPos] = unit.symbol;
                     arrUnits[i] = unit;
-                    
+
                 }
                 else if (random == 2)
                 {
@@ -62,23 +70,19 @@ namespace GADE_1B_Task_1
                 }
                 else if (random == 3)
                 {
-                    RangedUnit unit = new RangedUnit(randomX, randomY, 80, 1, 3, 1, "Team1", 'O', false);
+                    RangedUnit unit = new RangedUnit(randomX, randomY, 80, 1, 3, 3, "Team1", 'O', false);
                     arrMap[unit.xPos, unit.yPos] = unit.symbol;
                     arrUnits[i] = unit;
                 }
-                 else
-                {                  
-                    RangedUnit unit = new RangedUnit(randomX, randomY, 80, 1, 3, 1, "Team2", 'o', false);
+                else
+                {
+                    RangedUnit unit = new RangedUnit(randomX, randomY, 80, 1, 3, 3, "Team2", 'o', false);
                     arrMap[unit.xPos, unit.yPos] = unit.symbol;
                     arrUnits[i] = unit;
                 }
-
-                
-
-               
             }
 
-           
+
 
         }
        
